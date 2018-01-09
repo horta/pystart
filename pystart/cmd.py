@@ -13,6 +13,7 @@ from validate_email import validate_email
 from .licenses import get_license_content
 from .pip_search import pip_exact_search
 from .username import get_full_name, get_email
+from .progress import progress_indicator
 import semantic_version
 
 SETUP_PY_CONTENT = r"""from setuptools import setup
@@ -117,17 +118,23 @@ class Project(object):
         name = self._metadata['name']
         version = self._metadata['version']
 
-        with open(os.path.join(name, name, '__init__.py'), 'w') as f:
+        fn = os.path.join(name, name, '__init__.py')
+        print(fn)
+        with open(fn, 'w') as f:
             content = INIT_CONTENT.replace("{VERSION}", version)
             f.write(content)
 
     def _create_setup_files(self):
         name = self._metadata['name']
 
-        with open(os.path.join(name, 'setup.py'), 'w') as f:
+        fn = os.path.join(name, 'setup.py')
+        print(fn)
+        with open(fn, 'w') as f:
             f.write(SETUP_PY_CONTENT)
 
-        with open(os.path.join(name, 'setup.cfg'), 'w') as f:
+        fn = os.path.join(name, 'setup.cfg')
+        print(fn)
+        with open(fn, 'w') as f:
             f.write(self._cfg)
 
     def _create_license_file(self):
@@ -138,7 +145,9 @@ class Project(object):
         content = content.replace("<copyright holders>", author)
         year = str(datetime.datetime.now().year)
         content = content.replace("<year>", year)
-        with open(os.path.join(name, 'LICENSE.md'), 'w') as f:
+        fn = os.path.join(name, 'LICENSE.md')
+        print(fn)
+        with open(fn, 'w') as f:
             f.write(content)
 
     def _create_changelog_file(self):
@@ -154,13 +163,17 @@ class Project(object):
         content = content.replace("{VERSION}", version)
         content = content.replace("{DATE}", date)
         content = content.replace("{DESCRIPTION}", description)
-        with open(os.path.join(name, 'CHANGELOG.md'), 'w') as f:
+        fn = os.path.join(name, 'CHANGELOG.md')
+        print(fn)
+        with open(fn, 'w') as f:
             f.write(content)
 
     def _create_manifest_file(self):
         name = self._metadata['name']
         content = get_manifest_content()
-        with open(os.path.join(name, 'MANIFEST.in'), 'w') as f:
+        fn = os.path.join(name, 'MANIFEST.in')
+        print(fn)
+        with open(fn, 'w') as f:
             f.write(content)
 
     def _create_readme_file(self):
@@ -171,17 +184,21 @@ class Project(object):
         content = content.replace("{NAME}", name)
         content = content.replace("{DESCRIPTION}", description)
         content = content.replace("{LICENSE}", license)
-        with open(os.path.join(name, 'README.md'), 'w') as f:
+        fn = os.path.join(name, 'README.md')
+        print(fn)
+        with open(fn, 'w') as f:
             f.write(content)
 
     def create_project(self):
-        self._create_folders()
-        self._create_init_file()
-        self._create_setup_files()
-        self._create_license_file()
-        self._create_changelog_file()
-        self._create_manifest_file()
-        self._create_readme_file()
+        name = self._metadata['name']
+        with progress_indicator("Creating {} package".format(name)):
+            self._create_folders()
+            self._create_init_file()
+            self._create_setup_files()
+            self._create_license_file()
+            self._create_changelog_file()
+            self._create_manifest_file()
+            self._create_readme_file()
 
 
 def entry_point():
