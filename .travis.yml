@@ -1,0 +1,15 @@
+language: python
+sudo: false
+cache:
+- pip
+python:
+- '3.4'
+- '3.5'
+- '3.6'
+install:
+- pip install -r requirements.txt
+- pip install -U codecov pytest-gitignore
+script:
+- coverage run --source pystart -m pytest
+after_success:
+- codecov

@@ -39,7 +39,11 @@ def check_version(vrs):
 
 
 def is_pkgname_available(name):
-    return not pip_exact_search(name)
+    return not pip_exact_search(normalise_pkgname(name))
+
+
+def normalise_pkgname(name):
+    return name.lower().replace('-', '_')
 
 
 class Project(object):

@@ -12,6 +12,6 @@ def pip_exact_search(name):
     sys.stdout = mystdout = StringIO()
     pip.main(['search', name, '--disable-pip-version-check'])
     sys.stdout = old_stdout
-    output = mystdout.getvalue()
+    output = mystdout.getvalue().lower().replace('-', '_')
     r = re.compile("^{} .*$".format(name), re.I | re.M).search(output)
     return r is not None
