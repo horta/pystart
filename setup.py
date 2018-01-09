@@ -1,10 +1,13 @@
-import pypandoc
 from setuptools import setup
 
 if __name__ == '__main__':
     readme = open('README.md').read()
-    long_description = pypandoc.convert_text(
-        readme, 'rst', format='markdown_github')
+    try:
+        import pypandoc
+        long_description = pypandoc.convert_text(
+            readme, 'rst', format='markdown_github')
+    except (ImportError, RuntimeError):
+        long_description = readme
 
     console_scripts = ["pystart = pystart.cmd:entry_point"]
     setup(
