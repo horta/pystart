@@ -13,3 +13,11 @@ script:
 - coverage run --source pystart -m pytest
 after_success:
 - codecov
+deploy:
+  provider: releases
+  api_key:
+    secure: Fw8gdVOgUa8V4R4jGs6siLXsYGsh/876BnPmDdP0bzfzucPcHXpOZG8xyab0uZLG1iEXLomMLdJoOaxMy+UwoEuU+B0auLURLXm7m8q9GA5Ke2xOiEJJqAbSZpZotwolGV/mMesbd7gFA/C6UhSfFWkokoaKC/sS27GFlTVusUyvgbrYdu3bPD4OJvddcBnuQbT445/eFLPgWuz0mJR8BDXolNAtyZ1gUZuckS38h7Y09FFCpGpRk0oT9ME47gyl+yOfYxov7f6R/kqsNhbcmPY4JnqpRyEgPfFw7gQskQ9lvVuJ33qOOhle4j/tHOOSxxaWHw96fcBAMGzN7heTQSbwRmT2kUBaHLoeFKDUNu4a0f8t2FpkWYbhglOoH9nGi3B6yaIBsuZRK8MZVvwNNJDAwOhmaygWe9v++xnhyjXZtRUB/WPFsJq7hmbGfJBlWtEktsdaqkesskZbBSkut8mQD2pOUqTYPk2H3slXc92s23l00wB2sKykG1z8uxG9bvrMbmTu9pQpVhWcoxkUERZnpLwNHx6hIF2HpsVCaJtdjDMZdByUL32JO+heUu3DyY/eQNJXpJXcDoRuK1eOAwWcIA5BN6MzNsMyT+YSONnyM0DHLV95vTCoqC+w3kAeqQoGyMRxc91NJV7pTsq99Dlw/1kN39E3OsGpMyxGsUE=
+  on:
+    repo: horta/pystart
+    tags: true
+    branch: master
