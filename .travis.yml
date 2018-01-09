@@ -8,7 +8,7 @@ python:
 - '3.6'
 install:
 - pip install -r requirements.txt
-- pip install -U codecov pytest-gitignore
+- pip install -U codecov pytest-gitignore pytest-pep8
 script:
 - coverage run --source pystart -m pytest
 after_success:
