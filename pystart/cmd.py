@@ -7,12 +7,13 @@ from .config import get_config_file
 from .licenses import LICENSES
 from .classifiers import PLATFORMS
 from .changelog import get_changelog_content
-from .config import get_config_file
 from .manifest import get_manifest_content
 from .readme import get_readme_content
 from validate_email import validate_email
 from .licenses import get_license_content
 from .pip_search import pip_exact_search
+from .username import get_full_name, get_email
+import semantic_version
 
 SETUP_PY_CONTENT = r"""from setuptools import setup
 
@@ -28,8 +29,16 @@ __all__ = ["__version__"]
 """
 
 
-class InvalidConfigError(Exception):
-    pass
+def check_version(vrs):
+    try:
+        semantic_version.Version(vrs)
+    except ValueError:
+        return False
+    return True
+
+
+def is_pkgname_available(name):
+    return not pip_exact_search(name)
 
 
 class Project(object):
@@ -38,37 +47,44 @@ class Project(object):
         self._cfg = ""
 
     def ask_questions(self):
-        # questions = [
-        #     Text('name', message="What's your package name"),
-        #     Text('author', message="What's the name of package's author"),
-        #     Text(
-        #         'author_email',
-        #         message="What's the e-mail of package's author",
-        #         validate=lambda _, x: validate_email(x)),
-        #     Text('description', message="Brief description the package"),
-        #     Text('keywords', message="Comma-delimited list of Keywords"),
-        #     Text('version', message="What's the initial version"),
-        #     List(
-        #         'license',
-        #         message="What's the package license",
-        #         choices=LICENSES),
-        #     Checkbox(
-        #         'platforms',
-        #         message="Select the platforms your package support",
-        #         choices=PLATFORMS,
-        #     )
-        # ]
-        # answers = prompt(questions)
-        answers = dict(
-            name="pystart2",
-            author="Danilo Horta",
-            version="0.1.0",
-            author_email="danilo.horta@gmail.com",
-            description="Breif description",
-            license="MIT",
-            platforms=["Win", "Linux"],
-            keywords=["keyword 0", "keyword 1"])
+        questions = [
+            Text(
+                'name',
+                message="What's your package name",
+                validate=lambda _, x: is_pkgname_available(x)),
+            Text(
+                'author',
+                message="What's the name of package's author",
+                default=get_full_name()),
+            Text(
+                'author_email',
+                message="What's the e-mail of package's author",
+                default=get_email(),
+                validate=lambda _, x: validate_email(x)),
+            Text('description', message="Brief description the package"),
+            Text('keywords', message="Comma-delimited list of Keywords"),
+            Text(
+                'version',
+                message="What's the initial version",
+                default="0.1.0",
+                validate=lambda _, x: check_version(x)),
+            List(
+                'license',
+                message="What's the package license",
+                choices=LICENSES,
+                default="MIT"),
+            Checkbox(
+                'platforms',
+                message="Select the platforms your package support",
+                choices=PLATFORMS,
+            )
+        ]
+        answers = prompt(questions)
         self._metadata.update(answers)
+
+        keywords = self._metadata['keywords']
+        keywords = [k.strip() for k in keywords.strip().split(',')]
+        self._metadata['keywords'] = keywords
 
     def fill_default(self):
         self._metadata['maintainer'] = self._metadata['author']
@@ -77,13 +93,6 @@ class Project(object):
         self._metadata['download_url'] = download_url
         url = 'https://github.com/project/package'
         self._metadata['url'] = url
-
-    def check_pkgname(self):
-        name = self._metadata['name']
-        found = pip_exact_search(name)
-        if found:
-            print("Package name <{}> has already been taken.".format(name))
-            raise InvalidConfigError()
 
     def fill_cfg(self):
         cfg = get_config_file()
@@ -156,7 +165,12 @@ class Project(object):
 
     def _create_readme_file(self):
         name = self._metadata['name']
+        description = self._metadata['description']
+        license = self._metadata['license']
         content = get_readme_content()
+        content = content.replace("{NAME}", name)
+        content = content.replace("{DESCRIPTION}", description)
+        content = content.replace("{LICENSE}", license)
         with open(os.path.join(name, 'README.md'), 'w') as f:
             f.write(content)
 
@@ -167,16 +181,13 @@ class Project(object):
         self._create_license_file()
         self._create_changelog_file()
         self._create_manifest_file()
+        self._create_readme_file()
 
 
 def entry_point():
     p = Project()
 
-    try:
-        p.ask_questions()
-        p.fill_default()
-        p.check_pkgname()
-        p.fill_cfg()
-        p.create_project()
-    except InvalidConfigError:
-        pass
+    p.ask_questions()
+    p.fill_default()
+    p.fill_cfg()
+    p.create_project()

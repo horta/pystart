@@ -8,10 +8,10 @@ pip install {NAME}
 ```
 
 ## Usage
-Give usage examples.
+Usage examples.
 
 ## Authors
-{AUTHORS}
+* {AUTHOR}
 
 ## Acknowledgements
 - Acknowledgement 0
@@ -19,4 +19,4 @@ Give usage examples.
 - Acknowledgement 2
 
 ## License
-This project is licensed under the {LICENSE} License.
+This project is licensed under the {LICENSE} license.
