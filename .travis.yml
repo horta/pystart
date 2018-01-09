@@ -13,11 +13,18 @@ script:
 - coverage run --source pystart -m pytest
 after_success:
 - codecov
+notifications:
+  email:
+    recipients:
+      - danilo.horta@gmail.com
+    on_success: never
+    on_failure: always
 deploy:
-  provider: releases
-  api_key:
-    secure: Fw8gdVOgUa8V4R4jGs6siLXsYGsh/876BnPmDdP0bzfzucPcHXpOZG8xyab0uZLG1iEXLomMLdJoOaxMy+UwoEuU+B0auLURLXm7m8q9GA5Ke2xOiEJJqAbSZpZotwolGV/mMesbd7gFA/C6UhSfFWkokoaKC/sS27GFlTVusUyvgbrYdu3bPD4OJvddcBnuQbT445/eFLPgWuz0mJR8BDXolNAtyZ1gUZuckS38h7Y09FFCpGpRk0oT9ME47gyl+yOfYxov7f6R/kqsNhbcmPY4JnqpRyEgPfFw7gQskQ9lvVuJ33qOOhle4j/tHOOSxxaWHw96fcBAMGzN7heTQSbwRmT2kUBaHLoeFKDUNu4a0f8t2FpkWYbhglOoH9nGi3B6yaIBsuZRK8MZVvwNNJDAwOhmaygWe9v++xnhyjXZtRUB/WPFsJq7hmbGfJBlWtEktsdaqkesskZbBSkut8mQD2pOUqTYPk2H3slXc92s23l00wB2sKykG1z8uxG9bvrMbmTu9pQpVhWcoxkUERZnpLwNHx6hIF2HpsVCaJtdjDMZdByUL32JO+heUu3DyY/eQNJXpJXcDoRuK1eOAwWcIA5BN6MzNsMyT+YSONnyM0DHLV95vTCoqC+w3kAeqQoGyMRxc91NJV7pTsq99Dlw/1kN39E3OsGpMyxGsUE=
+  provider: pypi
+  user: dhorta
+  password:
+    secure: Z8E4eHDFh1aZrVXr+KTyKscVcTbLP5r5IGWJYyGa4g3uxv+NKvduOBH0F2LKVj+di2WqxEnQIIDp2bIHKx1/zSY4wYdTluF2N8lPR+m54BaHus9BA6ZRSLgZMNZInkgzAEPlBwdge/I5GaEvflNgPUPs0mY3cfU0jmd8CdDDpF3G549IZTkuSMPBaqoDQaPkCdfQmnugp0Xc/t4HVbbu3e48r2DdPdkuhPyJBghfN51qDdAI6tSgefpFkSuhRe7HLtO8Pjk3N99I/Gn697cwUu/TcajPt3Kw82cYqCu0RpUSt2BeovXRl/c3+ua+7efPExvLKBOTZZ6gEtAzNpe0h0NUGWxP4cJYsMk1rY5xrqKTCIun0k3z8cXFWOrCxN5PUTAWdd9R5ATgwue2RI9hErgaLnItVM+fEDbLT8PJUs8RHYf+udCIjC79m1yBT/dMTJRUZaY5YZyxSec9j/U4vxDBIM5N/gohuaZJ+LJntGJ/Adso/vwvDp19dOx61G4diSdK0Hz/kot4+E4lvoWFhGBet1uQuSdU2aWdC1JJ20aSe9h33PGx886cXYQal9mE4SAmX1qAphSOsDQSzX4BwSC1op5IdLpN7HcbcjNPC4tLHn6Vmi5Ifq3eDtaahDzo9BouUzgcnu7u5inckE7JinoO/BO/Z1Sdicb0jtdjly8=
   on:
-    repo: horta/pystart
     tags: true
-    branch: master
+    repo: horta/pystart
+    banch: master
