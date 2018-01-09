@@ -26,5 +26,8 @@ Animated GIF demonstrating the usage.
 ## Authors
 * [Danilo Horta](https://github.com/horta)
 
+## Acknowledgements
+- [Readable Licenses](https://github.com/nevir/readable-licenses) for providing license templates in markdown format.
+
 ## License
 This project is licensed under the [MIT License](https://raw.githubusercontent.com/horta/pystart/master/LICENSE.md).
