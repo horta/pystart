@@ -1,12 +1,16 @@
 from __future__ import absolute_import as _
 
 import os
+import datetime
 from inquirer import prompt, Text, List, Checkbox
 from .config import get_config_file
 from .licenses import LICENSES
 from .classifiers import PLATFORMS
+from .changelog import get_changelog_content
 from .config import get_config_file
+from .manifest import get_manifest_content
 from validate_email import validate_email
+from .licenses import get_license_content
 from .pip_search import pip_exact_search
 
 SETUP_PY_CONTENT = r"""from setuptools import setup
@@ -116,10 +120,46 @@ class Project(object):
         with open(os.path.join(name, 'setup.cfg'), 'w') as f:
             f.write(self._cfg)
 
+    def _create_license_file(self):
+        name = self._metadata['name']
+        author = self._metadata['author']
+        license = self._metadata['license']
+        content = get_license_content(license)
+        content = content.replace("<copyright holders>", author)
+        year = str(datetime.datetime.now().year)
+        content = content.replace("<year>", year)
+        with open(os.path.join(name, 'LICENSE.md'), 'w') as f:
+            f.write(content)
+
+    def _create_changelog_file(self):
+        name = self._metadata['name']
+        version = self._metadata['version']
+        description = self._metadata['description']
+        year = datetime.datetime.now().year
+        month = datetime.datetime.now().month
+        day = datetime.datetime.now().day
+        date = "{:4d}-{:02d}-{:02d}".format(year, month, day)
+        content = get_changelog_content()
+        content = content.replace("{NAME}", name)
+        content = content.replace("{VERSION}", version)
+        content = content.replace("{DATE}", date)
+        content = content.replace("{DESCRIPTION}", description)
+        with open(os.path.join(name, 'CHANGELOG.md'), 'w') as f:
+            f.write(content)
+
+    def _create_manifest_file(self):
+        name = self._metadata['name']
+        content = get_manifest_content()
+        with open(os.path.join(name, 'MANIFEST.in'), 'w') as f:
+            f.write(content)
+
     def create_project(self):
         self._create_folders()
         self._create_init_file()
         self._create_setup_files()
+        self._create_license_file()
+        self._create_changelog_file()
+        self._create_manifest_file()
 
 
 def entry_point():

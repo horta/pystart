@@ -2,7 +2,7 @@
 
 Quickly create new Python packages with standard configuration files.
 
-This package provides an intuitive command-line utility that iteratively asks simple questions in order to create a standard Python project from scratch. It is a handy way to start a new project with a clean structure!
+This package provides a command-line utility that asks simple questions in order to create a standard Python project from scratch. It is a handy way to start a new project with a clean structure!
 
 ## Install
 

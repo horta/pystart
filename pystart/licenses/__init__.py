@@ -3,9 +3,8 @@
 These files have been downloaded from
 https://github.com/nevir/readable-licenses.
 """
-LICENSES = [
-    'APACHEv2', 'GPLv2', 'BSD2CLAUSE', 'GPLv3', 'UNLICENSE', 'BSD3CLAUSE',
-    'ISC', 'ZLIB', 'GG-GPL', 'MIT'
-]
+from __future__ import absolute_import as _
 
-__all__ = ["LICENSES"]
+from .licenses import LICENSES, get_license_content
+
+__all__ = ["LICENSES", "get_license_content"]
