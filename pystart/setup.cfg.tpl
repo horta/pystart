@@ -10,7 +10,7 @@ download_url = https://github.com/organisation/{NAME}/releases/latest
 keywords = {KEYWORDS}
 license = {LICENSE}
 long_description = file: README.md
-long_description_content_type = "text/markdown; charset=ASCII"
+long_description_content_type = text/markdown; charset=ASCII
 maintainer = {MAINTAINER}
 maintainer_email = {MAINTAINER_EMAIL}
 name = {NAME}
