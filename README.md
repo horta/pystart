@@ -1,4 +1,5 @@
 # pystart
+[![Travis master](https://img.shields.io/travis/horta/pystart/master.svg?style=flat-square&label=master%20build)](https://travis-ci.org/horta/pystart) [![Travis develop](https://img.shields.io/travis/horta/pystart/develop.svg?style=flat-square&label=develop%20build)](https://travis-ci.org/horta/pystart)
 Quickly create new Python packages with standard configuration files.
 
 This package provides a command-line utility that asks simple questions in order to create a standard Python project from scratch. It is a handy way to start a new project with a clean structure!
