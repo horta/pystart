@@ -9,6 +9,7 @@ from .classifiers import PLATFORMS
 from .changelog import get_changelog_content
 from .config import get_config_file
 from .manifest import get_manifest_content
+from .readme import get_readme_content
 from validate_email import validate_email
 from .licenses import get_license_content
 from .pip_search import pip_exact_search
@@ -151,6 +152,12 @@ class Project(object):
         name = self._metadata['name']
         content = get_manifest_content()
         with open(os.path.join(name, 'MANIFEST.in'), 'w') as f:
+            f.write(content)
+
+    def _create_readme_file(self):
+        name = self._metadata['name']
+        content = get_readme_content()
+        with open(os.path.join(name, 'README.md'), 'w') as f:
             f.write(content)
 
     def create_project(self):
