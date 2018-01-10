@@ -19,6 +19,7 @@ script:
 - pip uninstall pystart --yes
 - python setup.py sdist
 - pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
+- pip uninstall pystart --yes
 after_success:
 - codecov
 notifications:
