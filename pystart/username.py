@@ -2,7 +2,7 @@ from __future__ import unicode_literals as _
 
 import os
 import pwd
-from subprocess import check_output
+from subprocess import check_output, CalledProcessError
 
 
 def get_full_name():
@@ -10,6 +10,9 @@ def get_full_name():
 
 
 def get_email():
-    em = check_output("git config --global --get user.email", shell=True)
-    em = em.decode('ascii')
-    return em.strip()
+    try:
+        em = check_output("git config --global --get user.email", shell=True)
+        em = em.decode('ascii')
+        return em.strip()
+    except CalledProcessError:
+        return ""
