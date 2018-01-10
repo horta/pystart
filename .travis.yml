@@ -16,6 +16,9 @@ install:
 script:
 - coverage run --source pystart -m pytest
 - python setup.py install
+- pip uninstall pystart --yes
+- python setup.py sdist
+- pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
 after_success:
 - codecov
 notifications:
