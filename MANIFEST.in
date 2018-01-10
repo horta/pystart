@@ -1,5 +1,7 @@
 include CHANGELOG.md
 include LICENSE.md
+include pystart/changelog/CHANGELOG.md.tpl
+include pystart/classifiers/classifiers.txt
 include pystart/licenses/APACHEv2-LICENSE.md
 include pystart/licenses/BSD2CLAUSE-LICENSE.md
 include pystart/licenses/BSD3CLAUSE-LICENSE.md
@@ -7,7 +9,11 @@ include pystart/licenses/GG-GPL-LICENSE.md
 include pystart/licenses/GPLv2-LICENSE.md
 include pystart/licenses/GPLv3-LICENSE.md
 include pystart/licenses/ISC-LICENSE.md
+include pystart/licenses/licenses.txt
 include pystart/licenses/MIT-LICENSE.md
 include pystart/licenses/UNLICENSE-LICENSE.md
 include pystart/licenses/ZLIB-LICENSE.md
+include pystart/manifest/MANIFEST.in.tpl
+include pystart/readme/README.md.tpl
+include pystart/setup.cfg.tpl
 include README.md
