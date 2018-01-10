@@ -85,11 +85,16 @@ class Project(object):
             )
         ]
         answers = prompt(questions)
+        if answers is None:
+            return False
+
         self._metadata.update(answers)
 
         keywords = self._metadata['keywords']
         keywords = [k.strip() for k in keywords.strip().split(',')]
         self._metadata['keywords'] = keywords
+
+        return True
 
     def fill_default(self):
         self._metadata['maintainer'] = self._metadata['author']
@@ -208,7 +213,9 @@ class Project(object):
 def entry_point():
     p = Project()
 
-    p.ask_questions()
+    if not p.ask_questions():
+        return
+
     p.fill_default()
     p.fill_cfg()
     p.create_project()
