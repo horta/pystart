@@ -1,6 +1,7 @@
 from __future__ import absolute_import as _
 
 import os
+import re
 import datetime
 from inquirer import prompt, Text, List, Checkbox
 from .config import get_config_file
@@ -23,10 +24,27 @@ if __name__ == '__main__':
 """
 
 INIT_CONTENT = r"""from __future__ import absolute_import as _
+from .hello import say_hello
 
 __version__ = "{VERSION}"
 
-__all__ = ["__version__"]
+__all__ = ["__version__", "say_hello"]
+"""
+
+HELLO_PY_CONTENT = r"""import getpass
+
+def say_hello():
+    print("Hello, {} =)".format(getpass.getuser()))
+"""
+
+WHAT_TO_DO_NEXT = r"""What to do next? From {pkgname} folder,
+
+- Install it by symlinking the folder:
+  $ python setup.py develop
+
+- From python/ipython console, enter:
+  >>> import {pkgname}
+  >>> {pkgname}.say_hello()
 """
 
 
@@ -38,8 +56,19 @@ def check_version(vrs):
     return True
 
 
+def check_pkgname_name(name):
+    c = re.compile(r"^[a-zA-Z][_a-zA-Z0-9]*[a-zA-Z0-9]$")
+    return c.match(name) is not None
+
+
 def is_pkgname_available(name):
     return not pip_exact_search(normalise_pkgname(name))
+
+
+def check_pkgname(name):
+    if not check_pkgname_name(name):
+        return False
+    return is_pkgname_available(name)
 
 
 def normalise_pkgname(name):
@@ -56,7 +85,7 @@ class Project(object):
             Text(
                 'name',
                 message="What's your package name",
-                validate=lambda _, x: is_pkgname_available(x)),
+                validate=lambda _, x: check_pkgname(x)),
             Text(
                 'author',
                 message="What's the name of package's author",
@@ -67,7 +96,6 @@ class Project(object):
                 default=get_email(),
                 validate=lambda _, x: validate_email(x)),
             Text('description', message="Brief description the package"),
-            Text('keywords', message="Comma-delimited list of Keywords"),
             Text(
                 'version',
                 message="What's the initial version",
@@ -78,21 +106,12 @@ class Project(object):
                 message="What's the package license",
                 choices=LICENSES,
                 default="MIT"),
-            Checkbox(
-                'platforms',
-                message="Select the platforms your package support",
-                choices=PLATFORMS,
-            )
         ]
         answers = prompt(questions)
         if answers is None:
             return False
 
         self._metadata.update(answers)
-
-        keywords = self._metadata['keywords']
-        keywords = [k.strip() for k in keywords.strip().split(',')]
-        self._metadata['keywords'] = keywords
 
         return True
 
@@ -113,9 +132,9 @@ class Project(object):
         cfg = cfg.replace("{MAINTAINER_EMAIL}", self._metadata["author_email"])
         cfg = cfg.replace("{DESCRIPTION}", self._metadata["description"])
         cfg = cfg.replace("{LICENSE}", self._metadata["license"])
-        cfg = cfg.replace("{KEYWORDS}", ', '.join(self._metadata["keywords"]))
-        cfg = cfg.replace("{PLATFORMS}",
-                          ', '.join(self._metadata["platforms"]))
+        # cfg = cfg.replace("{KEYWORDS}", ', '.join(self._metadata["keywords"]))
+        # cfg = cfg.replace("{PLATFORMS}",
+        #                   ', '.join(self._metadata["platforms"]))
         self._cfg = cfg
 
     def _create_folders(self):
@@ -132,6 +151,14 @@ class Project(object):
         with open(fn, 'w') as f:
             content = INIT_CONTENT.replace("{VERSION}", version)
             f.write(content)
+
+    def _create_hello_file(self):
+        name = self._metadata['name']
+
+        fn = os.path.join(name, name, 'hello.py')
+        print(fn)
+        with open(fn, 'w') as f:
+            f.write(HELLO_PY_CONTENT)
 
     def _create_setup_files(self):
         name = self._metadata['name']
@@ -198,16 +225,23 @@ class Project(object):
         with open(fn, 'w') as f:
             f.write(content)
 
+    def _goodbye(self):
+        name = self._metadata['name']
+        print()
+        print(WHAT_TO_DO_NEXT.format(pkgname=name))
+
     def create_project(self):
         name = self._metadata['name']
         with progress_indicator("Creating {} package".format(name)):
             self._create_folders()
             self._create_init_file()
+            self._create_hello_file()
             self._create_setup_files()
             self._create_license_file()
             self._create_changelog_file()
             self._create_manifest_file()
             self._create_readme_file()
+        self._goodbye()
 
 
 def entry_point():

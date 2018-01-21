@@ -7,14 +7,17 @@ classifiers =
     Programming Language :: Python
 description = {DESCRIPTION}
 download_url = https://github.com/organisation/{NAME}/releases/latest
-keywords = {KEYWORDS}
+keywords = keyword0, keyword1, keyword2
 license = {LICENSE}
 long_description = file: README.md
-long_description_content_type = text/markdown; charset=ASCII
+long_description_content_type = text/markdown
 maintainer = {MAINTAINER}
 maintainer_email = {MAINTAINER_EMAIL}
 name = {NAME}
-platforms = {PLATFORMS}
+platforms =
+    Linux
+    MacOS
+    Windows
 url = https://github.com/organisation/{NAME}
 version = attr: {NAME}.__version__
 
